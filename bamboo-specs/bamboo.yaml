@@ -22,6 +22,8 @@ Default Job:
       - |-
         mkdir brownbag
         ls -la
+        mkdir brownbag 2
+        ls -la
       description: brownbag
   artifact-subscriptions: []
 repositories:
