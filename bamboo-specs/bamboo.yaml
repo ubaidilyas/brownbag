@@ -1,0 +1,62 @@
+---
+version: 2
+plan:
+  project-key: VW
+  key: VW
+  name: VW
+stages:
+- Default Stage:
+    manual: false
+    final: false
+    jobs:
+    - Default Job
+Default Job:
+  key: JOB1
+  tasks:
+  - checkout:
+      force-clean-build: false
+      description: Checkout Default Repository
+  - script:
+      interpreter: SHELL
+      scripts:
+      - |-
+        mkdir brownbag
+        ls -la
+      description: brownbag
+  artifact-subscriptions: []
+repositories:
+- brownbag:
+    scope: global
+triggers:
+- polling:
+    period: '5'
+branches:
+  create: for-new-branch
+  delete:
+    after-deleted-days: 7
+    after-inactive-days: 30
+  link-to-jira: false
+notifications: []
+labels: []
+dependencies:
+  require-all-stages-passing: false
+  enabled-for-branches: true
+  block-strategy: none
+  plans: []
+other:
+  concurrent-build-plugin: system-default
+---
+version: 2
+plan:
+  key: VW-VW
+plan-permissions:
+- users:
+  - ubaid
+  permissions:
+  - view
+  - edit
+  - build
+  - clone
+  - admin
+  - view-configuration
+...
