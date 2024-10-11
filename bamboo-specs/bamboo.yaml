@@ -1,0 +1,85 @@
+---
+version: 2
+plan:
+  project-key: CGIB
+  key: CGIB
+  name: CGIBB
+stages:
+- Default Stage:
+    manual: false
+    final: false
+    jobs:
+    - Default Job
+- Test_Stage:
+    manual: false
+    final: false
+    jobs:
+    - Default Job 3
+Default Job:
+  key: JOB1
+  tasks:
+  - checkout:
+      force-clean-build: false
+      description: Checkout Default Repository
+  - script:
+      interpreter: SHELL
+      scripts:
+      - |-
+        ls -la
+
+        mkdir brownbaglivedemo
+
+        ls -la
+      description: list directories
+  - inject-variables:
+      file: brownbag.properties
+      scope: RESULT
+      namespace: inject
+      description: inject
+  artifact-subscriptions: []
+Default Job 3:
+  key: DJ3
+  tasks:
+  - checkout:
+      force-clean-build: false
+      description: Checkout Default Repository
+  artifact-subscriptions: []
+repositories:
+- brownbag:
+    scope: global
+triggers:
+- polling:
+    period: '5'
+branches:
+  create: manually
+  delete: never
+  link-to-jira: true
+notifications: []
+labels: []
+dependencies:
+  require-all-stages-passing: false
+  enabled-for-branches: true
+  block-strategy: none
+  plans: []
+other:
+  concurrent-build-plugin: system-default
+---
+version: 2
+plan:
+  key: CGIB-CGIB
+plan-permissions:
+- users:
+  - ubaid
+  permissions:
+  - view
+  - edit
+  - build
+  - clone
+  - admin
+  - view-configuration
+- roles:
+  - logged-in
+  - anonymous
+  permissions:
+  - view
+...
